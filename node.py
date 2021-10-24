@@ -13,12 +13,19 @@ class Node:
     def __repr__(self):
         return str(self.state)
 
-    def __init__(self, state, goal):
-        self.state = state
-        self.goalMap = self.render_map(goal)
-        self.map = self.render_map(state)
-        self.gen_next_nodes()
-        self.calc_heuristic2()
+    def __init__(self, *args):
+        # init for ROOT
+        if len(args) == 2:
+            self.state = args[0]
+            self.goalMap = self.render_map(args[1])
+            self.map = self.render_map(args[0])
+            self.calc_heuristic2()
+        else:
+            # init for CHILD
+            self.map = args[0]
+            self.goalMap = args[1]
+            self.last_operator = args[2]
+            self.blank_pos = args[3]
 
     def render_map(self, state):
         newMap = []
@@ -60,7 +67,6 @@ class Node:
                 print(y + " ", end="")
             print("")
 
-        print("Size: " + str(self.size[0]) + ":" + str(self.size[1]))
         print("Blank is on position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
         print("Heuristic: " + str(self.heuristic))
 
@@ -80,7 +86,6 @@ class Node:
         return possibilities
 
     def calc_heuristic2(self):
-
         allNumsValue = []
         for y in self.map:
             for x in y:
@@ -122,3 +127,30 @@ class Node:
     def gen_next_nodes(self):
         possibilities = self.get_possible_moves()
         print(possibilities)
+        # get next node for every possible move
+        for possibility in possibilities:
+
+            # gen map after move
+            newMap = [row[:] for row in self.map]
+            newBlankPos = None
+            # calc new blank pos and switch values
+            if possibility == "VPRAVO":
+                newBlankPos = [self.blank_pos[0], self.blank_pos[1] + 1]
+                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
+            elif possibility == "VLAVO":
+                newBlankPos = [self.blank_pos[0], self.blank_pos[1] - 1]
+                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
+            elif possibility == "HORE":
+                newBlankPos = [self.blank_pos[0] - 1, self.blank_pos[1]]
+                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
+            elif possibility == "DOLE":
+                newBlankPos = [self.blank_pos[0] + 1, self.blank_pos[1]]
+                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
+
+            newMap[newBlankPos[0]][newBlankPos[1]] = "M"
+
+            self.nodes.append(Node(newMap, self.goalMap, possibility, newBlankPos))
+
+    def print_next_nodes(self):
+        for node in self.nodes:
+            node.print_state()
