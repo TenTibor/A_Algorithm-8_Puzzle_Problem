@@ -5,7 +5,7 @@ class Node:
     depth = 0
     h = 0
     score = 0
-    before_operator = None
+    last_operator = None
     blank_pos = 0
     size = [0, 0]
 
@@ -56,4 +56,12 @@ class Node:
         possibility = []
         if self.blank_pos[1] != 0:
             possibility.append("HORE")
+        if self.blank_pos[0] != 0:
+            possibility.append("VLAVO")
+        if self.blank_pos[1] != self.size[1]:
+            possibility.append("VPRAVO")
+        if self.blank_pos[0] != self.size[0]:
+            possibility.append("DOLE")
+        if self.last_operator in possibility:
+            possibility.remove(self.last_operator)
         print(possibility)
