@@ -7,6 +7,7 @@ class Node:
     score = 0
     before_operator = None
     blank_pos = 0
+    size = [0, 0]
 
     def __repr__(self):
         return str(self.state)
@@ -14,6 +15,7 @@ class Node:
     def __init__(self, state):
         self.state = state
         self.render_map()
+        self.gen_next_nodes()
 
     def render_map(self):
         temp = self.state.replace("((", "").replace("))", "").split(" ")
@@ -39,11 +41,19 @@ class Node:
                     self.blank_pos = [x, y]
             x += 1
         self.map.append(container)
+        self.size = [x, y + 1]
 
     def print_state(self):
-        print(self.map)
-        print("Blank is on postion: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
+        for x in self.map:
+            for y in x:
+                print(y + " ", end="")
+            print("")
+
+        print("Size: " + str(self.size[0]) + ":" + str(self.size[1]))
+        print("Blank is on position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
 
     def gen_next_nodes(self):
-        # calculate possibilities
-        print("ok")
+        possibility = []
+        if self.blank_pos[1] != 0:
+            possibility.append("HORE")
+        print(possibility)
