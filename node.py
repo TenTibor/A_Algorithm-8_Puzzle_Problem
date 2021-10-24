@@ -5,10 +5,9 @@ class Node:
     map = []
     goalMap = []
     depth = 0
-    heuristic = 0
-    score = 0
+    heuristic = None
     last_operator = None
-    blank_pos = 0
+    blank_pos = None
     size = [0, 0]
 
     def __repr__(self):
@@ -19,6 +18,7 @@ class Node:
         self.goalMap = self.render_map(goal)
         self.map = self.render_map(state)
         self.gen_next_nodes()
+        self.calc_heuristic2()
 
     def render_map(self, state):
         newMap = []
@@ -62,6 +62,7 @@ class Node:
 
         print("Size: " + str(self.size[0]) + ":" + str(self.size[1]))
         print("Blank is on position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
+        print("Heuristic: " + str(self.heuristic))
 
     def get_possible_moves(self):
         possibilities = []
@@ -78,7 +79,45 @@ class Node:
 
         return possibilities
 
-    # def calc_heuristic2:
+    def calc_heuristic2(self):
+
+        allNumsValue = []
+        for y in self.map:
+            for x in y:
+                if x in allNumsValue:
+                    print("")
+                elif x == "M":
+                    allNumsValue.append(0)
+                else:
+                    allNumsValue.append(x)
+        # print(allNumsValue)
+
+        # find num in goal map
+        curX = 0
+        curY = 0
+        for index, num in enumerate(allNumsValue):
+            goalY = 0
+            if num != 0:
+                for y in self.goalMap:
+                    if num in y:
+                        goalX = y.index(num)
+                        # print("goalY", goalY)
+                        # print("currY", curY)
+                        hThisX = (goalX - curX) if goalX > curX else curX - goalX
+
+                        hThisY = (goalY - curY) if goalY > curY else curY - goalY
+
+                        allNumsValue[index] = hThisX + hThisY
+                        # print(num, ":", allNumsValue[index], "(", hThisX, "+", hThisY, ")")
+                        break
+                    goalY += 1
+
+            curX += 1
+            if curX == 3:
+                curY += 1
+                curX = 0
+
+        self.heuristic = sum(allNumsValue)
 
     def gen_next_nodes(self):
         possibilities = self.get_possible_moves()
