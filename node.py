@@ -1,9 +1,11 @@
 class Node:
     state = None
+    goal = None
     nodes = []
     map = []
+    goalMap = []
     depth = 0
-    h = 0
+    heuristic = 0
     score = 0
     last_operator = None
     blank_pos = 0
@@ -12,13 +14,15 @@ class Node:
     def __repr__(self):
         return str(self.state)
 
-    def __init__(self, state):
+    def __init__(self, state, goal):
         self.state = state
-        self.render_map()
+        self.goalMap = self.render_map(goal)
+        self.map = self.render_map(state)
         self.gen_next_nodes()
 
-    def render_map(self):
-        temp = self.state.replace("((", "").replace("))", "").split(" ")
+    def render_map(self, state):
+        newMap = []
+        temp = state.replace("((", "").replace("))", "").split(" ")
         container = []
         x = 0
         y = 0
@@ -26,7 +30,7 @@ class Node:
             if ")(" in value:
                 tempValue = value.split(")(")
                 container.append(tempValue[0])
-                self.map.append(container[:])  # ":" to fixed multiple copies in map
+                newMap.append(container[:])  # ":" to fixed multiple copies in map
                 if tempValue[0] == "M":
                     self.blank_pos = [x, y]
                 container.clear()
@@ -40,8 +44,15 @@ class Node:
                 if value == "M":
                     self.blank_pos = [x, y]
             x += 1
-        self.map.append(container)
+        newMap.append(container)
         self.size = [x, y + 1]
+        return newMap
+
+    def print_goal(self):
+        for x in self.goalMap:
+            for y in x:
+                print(y + " ", end="")
+            print("")
 
     def print_state(self):
         for x in self.map:
@@ -52,16 +63,23 @@ class Node:
         print("Size: " + str(self.size[0]) + ":" + str(self.size[1]))
         print("Blank is on position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
 
-    def gen_next_nodes(self):
-        possibility = []
+    def get_possible_moves(self):
+        possibilities = []
         if self.blank_pos[1] != 0:
-            possibility.append("HORE")
+            possibilities.append("HORE")
         if self.blank_pos[0] != 0:
-            possibility.append("VLAVO")
+            possibilities.append("VLAVO")
         if self.blank_pos[1] != self.size[1]:
-            possibility.append("VPRAVO")
+            possibilities.append("VPRAVO")
         if self.blank_pos[0] != self.size[0]:
-            possibility.append("DOLE")
-        if self.last_operator in possibility:
-            possibility.remove(self.last_operator)
-        print(possibility)
+            possibilities.append("DOLE")
+        if self.last_operator in possibilities:
+            possibilities.remove(self.last_operator)
+
+        return possibilities
+
+    # def calc_heuristic2:
+
+    def gen_next_nodes(self):
+        possibilities = self.get_possible_moves()
+        print(possibilities)
