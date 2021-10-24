@@ -19,13 +19,14 @@ class Node:
             self.state = args[0]
             self.goalMap = self.render_map(args[1])
             self.map = self.render_map(args[0])
-            self.calc_heuristic2()
         else:
             # init for CHILD
             self.map = args[0]
             self.goalMap = args[1]
             self.last_operator = args[2]
             self.blank_pos = args[3]
+            self.depth = args[4]
+        self.calc_heuristic2()
 
     def render_map(self, state):
         newMap = []
@@ -67,8 +68,8 @@ class Node:
                 print(y + " ", end="")
             print("")
 
-        print("Blank is on position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
         print("Heuristic: " + str(self.heuristic))
+        print("Depth: " + str(self.depth))
 
     def get_possible_moves(self):
         possibilities = []
@@ -149,7 +150,7 @@ class Node:
 
             newMap[newBlankPos[0]][newBlankPos[1]] = "M"
 
-            self.nodes.append(Node(newMap, self.goalMap, possibility, newBlankPos))
+            self.nodes.append(Node(newMap, self.goalMap, possibility, newBlankPos, self.depth + 1))
 
     def print_next_nodes(self):
         for node in self.nodes:
