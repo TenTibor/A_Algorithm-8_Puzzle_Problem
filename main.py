@@ -1,4 +1,6 @@
 from node import Node
+from datetime import datetime
+start_time = datetime.now()
 
 input = "((4 1 3)(M 2 5)(8 7 6))"
 goal = "((1 2 3)(8 M 4)(7 6 5))"
@@ -12,8 +14,8 @@ open = [root]  # blue
 
 thisNode = root
 while thisNode.heuristic > 0:
-    print("===== To Use =====")
-    thisNode.print_state()
+    # print("===== To Use =====")
+    # thisNode.print_state()
     open.remove(thisNode)
     closed.append(thisNode)
 
@@ -23,10 +25,10 @@ while thisNode.heuristic > 0:
         if node.is_not_in(closed):
             open.append(node)
 
-    print("==== actual ====")
-    print("Opened list:", len(open))
-    print(open)
-    print("Closed list:", len(closed))
+    # print("==== actual ====")
+    # print("Opened list:", len(open))
+    # print(open)
+    # print("Closed list:", len(closed))
     # print(open)
     # thisNode.print_next_nodes()
     # closed.append(thisNode)
@@ -38,6 +40,8 @@ while thisNode.heuristic > 0:
             bestNode = actualNode
 
     thisNode = bestNode
+print("======= FINISH =======")
+thisNode.print_state()
 
 # solution found
 moves = ""
@@ -47,7 +51,10 @@ while thisNode is not None:
         moves = " > " + thisNode.last_operator + moves
         steps += 1
     thisNode = thisNode.parent_node
+
+print("======= RESULT =======")
 print(moves[3:])
 print("Steps:", steps)
 print("Opened list:", len(open))
 print("Closed list:", len(closed))
+print('Duration: {}'.format(datetime.now() - start_time))
