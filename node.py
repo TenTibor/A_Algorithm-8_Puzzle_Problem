@@ -78,62 +78,36 @@ class Node:
 
     def get_possible_moves(self):
         possibilities = []
-        if self.blank_pos[0] != 0:
+        if self.blank_pos[0] != 0 and self.last_operator != "DOLE":
             possibilities.append("HORE")
-        if self.blank_pos[1] != 0:
+        if self.blank_pos[1] != 0 and self.last_operator != "VPRAVO":
             possibilities.append("VLAVO")
-        if self.blank_pos[1] != self.size[1] - 1:
+        if self.blank_pos[1] != self.size[1] - 1 and self.last_operator != "VLAVO":
             possibilities.append("VPRAVO")
-        if self.blank_pos[0] != self.size[0] - 1:
+        if self.blank_pos[0] != self.size[0] - 1 and self.last_operator != "HORE":
             possibilities.append("DOLE")
-        if self.last_operator in possibilities:
-            if self.last_operator == "HORE":
-                possibilities.remove("DOLE")
-            if self.last_operator == "DOLE":
-                possibilities.remove("HORE")
-            if self.last_operator == "VLAVO":
-                possibilities.remove("VPRAVO")
-            if self.last_operator == "VPRAVO":
-                possibilities.remove("VLAVO")
 
         return possibilities
 
     def calc_heuristic2(self):
-        allNumsValue = []
-        for y in self.map:
-            for x in y:
-                if x in allNumsValue:
-                    print("")
-                elif x == "M":
-                    allNumsValue.append(0)
-                else:
-                    allNumsValue.append(x)
-        # print(allNumsValue)
+        sum = 0
 
-        # find num in goal map
-        curX = 0
-        curY = 0
-        for index, num in enumerate(allNumsValue):
-            goalY = 0
-            if num != 0:
-                for y in self.goalMap:
-                    if num in y:
-                        goalX = y.index(num)
-                        # print("goalY", goalY)
-                        # print("currY", curY)
-                        hThisX = (goalX - curX) if goalX > curX else curX - goalX
-                        hThisY = (goalY - curY) if goalY > curY else curY - goalY
+        # if self.depth == 27:
+        #     print("lol")
 
-                        allNumsValue[index] = hThisX + hThisY
-                        break
-                    goalY += 1
+        for yIndex, yMap in enumerate(self.map):
+            for xMap in yMap:
+                xIndex = yMap.index(xMap)
+                if xMap != "M":
+                    for yGoalIndex, yGoal in enumerate(self.goalMap):
+                        if xMap in yGoal:
+                            xGoalIndex = yGoal.index(xMap)
+                            hThisX = (xGoalIndex - xIndex) if xGoalIndex > xIndex else xIndex - xGoalIndex
+                            hThisY = (yGoalIndex - yIndex) if yGoalIndex > yIndex else yIndex - yGoalIndex
+                            sum += hThisX + hThisY
+                            break
 
-            curX += 1
-            if curX == 3:
-                curY += 1
-                curX = 0
-
-        self.heuristic = sum(allNumsValue)
+        self.heuristic = sum
 
     def gen_next_nodes(self):
         possibilities = self.get_possible_moves() if self.heuristic > 0 else []

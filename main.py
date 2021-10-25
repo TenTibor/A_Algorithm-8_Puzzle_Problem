@@ -1,5 +1,3 @@
-import sys
-
 from node import Node
 from datetime import datetime
 import random
@@ -31,12 +29,20 @@ start_time = datetime.now()
 input = get_random_state(3, 3)
 goal = get_random_state(3, 3)
 # input = "((M 1 2)(3 4 5))"
-# goal = "((3 4 5)(0 1 2))"
+# goal = "((3 4 5)(M 1 2))"
+
+
+input = "((M 1 2)(3 4 5)(6 7 8))"
+goal = "((8 M 6)(5 4 7)(2 3 1))"
+
+# input = "((M 2 3)(1 4 5)(8 7 6))"
+# input = "((1 2 3)(4 M 5)(8 7 6))"
+# goal = "((1 2 3)(8 M 4)(7 6 5))"
 
 root = Node(input, goal)
 print("======= START ======")
 root.print_state()
-
+#
 print("======= Goal =======")
 root.print_goal()
 
@@ -46,6 +52,7 @@ open = [root]  # blue
 nodeCount = 0
 thisNode = root
 while thisNode.heuristic > 0:
+    nodeCount += 1
     # print("===== To Use =====")
     # thisNode.print_state()
     open.remove(thisNode)
@@ -73,11 +80,12 @@ while thisNode.heuristic > 0:
 
     thisNode = bestNode
 
-    # print status
-    # sys.stdout.write("\033[K")
-    print("\r", f"> Node Num. {nodeCount} | Depth: {thisNode.depth} | Time: {format(datetime.now() - start_time)[:-3]}",
+    # print refreshing status
+    print("\r", f"> Node Num. {nodeCount} "
+                f"| Depth: {thisNode.depth} "
+                f"| Time: {format(datetime.now() - start_time)[:-5]}"
+                f"| Average: {(datetime.now() - start_time) / nodeCount}/node",
           end="")
-    nodeCount += 1
 
 print("\n======= FINISH =======")
 thisNode.print_state()
@@ -96,4 +104,6 @@ print(moves[3:])
 print("Steps:", steps)
 print("Opened list:", len(open))
 print("Closed list:", len(closed))
+print("Nodes:", nodeCount)
 print('Duration: {}'.format(datetime.now() - start_time))
+print(f"Avery time per Node:", (datetime.now() - start_time) / nodeCount)
