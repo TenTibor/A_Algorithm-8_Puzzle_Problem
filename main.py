@@ -47,7 +47,7 @@ print("======= Goal =======")
 root.print_goal()
 
 closed = []
-open = [root]  # blue
+opened = [root]  # blue
 
 nodeCount = 0
 thisNode = root
@@ -55,14 +55,14 @@ while thisNode.heuristic > 0:
     nodeCount += 1
     # print("===== To Use =====")
     # thisNode.print_state()
-    open.remove(thisNode)
+    opened.remove(thisNode)
     closed.append(thisNode)
 
     nodes = thisNode.gen_next_nodes()
     for node in nodes:
         # add unique nodes
         if node.is_not_in(closed):
-            open.append(node)
+            opened.insert(0, node)
 
     # print("==== actual ====")
     # print("Opened list:", len(open))
@@ -73,8 +73,8 @@ while thisNode.heuristic > 0:
     # closed.append(thisNode)
 
     # find best price
-    bestNode = open[0]
-    for actualNode in open:
+    bestNode = opened[0]
+    for actualNode in opened:
         if actualNode.get_price() < bestNode.get_price():
             bestNode = actualNode
 
@@ -102,7 +102,7 @@ while thisNode is not None:
 print("======= RESULT =======")
 print(moves[3:])
 print("Steps:", steps)
-print("Opened list:", len(open))
+print("Opened list:", len(opened))
 print("Closed list:", len(closed))
 print("Nodes:", nodeCount)
 print('Duration: {}'.format(datetime.now() - start_time))
