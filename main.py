@@ -1,17 +1,49 @@
+import sys
+
 from node import Node
 from datetime import datetime
-start_time = datetime.now()
+import random
 
-input = "((4 1 3)(M 2 5)(8 7 6))"
-goal = "((1 2 3)(8 M 4)(7 6 5))"
+
+def get_random_state(m, n):
+    result = ["M"]
+    for num in range(1, m * n):
+        result.append(num)
+    random.shuffle(result)
+    resultString = "("
+
+    resultIndex = 0
+    for y in range(m):
+        resultString += "("
+        for x in range(n):
+            resultString += str(result[resultIndex])
+            resultIndex += 1
+            if x != n - 1:
+                resultString += " "
+
+        resultString += ")"
+
+    resultString += ")"
+    return resultString
+
+
+start_time = datetime.now()
+input = get_random_state(3, 3)
+goal = get_random_state(3, 3)
+# input = "((M 1 2)(3 4 5))"
+# goal = "((3 4 5)(0 1 2))"
 
 root = Node(input, goal)
+print("======= START ======")
+root.print_state()
+
 print("======= Goal =======")
 root.print_goal()
 
 closed = []
 open = [root]  # blue
 
+nodeCount = 0
 thisNode = root
 while thisNode.heuristic > 0:
     # print("===== To Use =====")
@@ -40,7 +72,14 @@ while thisNode.heuristic > 0:
             bestNode = actualNode
 
     thisNode = bestNode
-print("======= FINISH =======")
+
+    # print status
+    # sys.stdout.write("\033[K")
+    print("\r", f"> Node Num. {nodeCount} | Depth: {thisNode.depth} | Time: {format(datetime.now() - start_time)[:-3]}",
+          end="")
+    nodeCount += 1
+
+print("\n======= FINISH =======")
 thisNode.print_state()
 
 # solution found
