@@ -59,10 +59,9 @@ while thisNode.heuristic > 0:
     closed.append(thisNode)
 
     nodes = thisNode.gen_next_nodes()
+
     for node in nodes:
-        # add unique nodes
-        if node.is_not_in(closed):
-            opened.insert(0, node)
+        opened.insert(0, node)
 
     # print("==== actual ====")
     # print("Opened list:", len(open))

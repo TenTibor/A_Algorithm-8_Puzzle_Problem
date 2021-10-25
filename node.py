@@ -111,39 +111,35 @@ class Node:
 
     def gen_next_nodes(self):
         possibilities = self.get_possible_moves() if self.heuristic > 0 else []
-        newBlankPos = self.blank_pos
+        newBlankPos = [999, 999]
         createdNodes = []
         for possibility in possibilities:
 
             # gen map after move
             newMap = [row[:] for row in self.map]
+
             # calc new blank pos and switch values
             if possibility == "VPRAVO":
                 newBlankPos = [self.blank_pos[0], self.blank_pos[1] + 1]
-                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             elif possibility == "VLAVO":
                 newBlankPos = [self.blank_pos[0], self.blank_pos[1] - 1]
-                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             elif possibility == "HORE":
                 newBlankPos = [self.blank_pos[0] - 1, self.blank_pos[1]]
-                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             elif possibility == "DOLE":
                 newBlankPos = [self.blank_pos[0] + 1, self.blank_pos[1]]
-                newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
 
+            newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             newMap[newBlankPos[0]][newBlankPos[1]] = "M"
+
             newNode = Node(newMap, self.goalMap, possibility, newBlankPos, self.depth + 1, self.size)
             newNode.blank_pos = newBlankPos  # fix changing blank pos
             newNode.parent_node = self
 
             createdNodes.append(newNode)
 
-        # for createdNode in createdNodes:
-        #     self.nodes.append(createdNode)
         return createdNodes
 
     def print_next_nodes(self):
-        # self.nodes[0].print_state()
         for node in self.nodes:
             node.print_state()
 
@@ -156,7 +152,6 @@ class Node:
             unique = False
             for y in range(self.size[0]):
                 for x in range(self.size[1]):
-                    # print(self.map[y][x], node.map[y][x])
                     if self.map[y][x] != node.map[y][x]:
                         unique = True
                         break
