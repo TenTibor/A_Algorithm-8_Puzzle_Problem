@@ -20,7 +20,6 @@ class Node:
             self.state = args[0]
             self.goalMap = self.render_map(args[1])
             self.map = self.render_map(args[0])
-            print("ROOTING")
         else:
             # init for CHILD
             self.map = args[0]
@@ -46,20 +45,20 @@ class Node:
                 container.append(tempValue[0])
                 newMap.append(container[:])  # ":" to fixed multiple copies in map
                 if tempValue[0] == "M":
-                    self.blank_pos = [x, y]
+                    self.blank_pos = [y, x]
                 container.clear()
                 y += 1
                 x = 0
                 container.append(tempValue[1])
                 if tempValue[1] == "M":
-                    self.blank_pos = [x, y]
+                    self.blank_pos = [y, x]
             else:
                 container.append(value)
                 if value == "M":
-                    self.blank_pos = [x, y]
+                    self.blank_pos = [y, x]
             x += 1
         newMap.append(container)
-        self.size = [x, y + 1]
+        self.size = [y + 1, x]
         return newMap
 
     def print_goal(self):

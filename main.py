@@ -1,6 +1,6 @@
 from node import Node
 
-input = "((M 1 3)(4 2 5)(8 7 6))"
+input = "((4 1 3)(M 2 5)(8 7 6))"
 goal = "((1 2 3)(8 M 4)(7 6 5))"
 
 closed = []
