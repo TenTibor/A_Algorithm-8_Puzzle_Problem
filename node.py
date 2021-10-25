@@ -75,7 +75,6 @@ class Node:
         print("Blank position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
         print("Heuristic: " + str(self.heuristic))
         print("Depth: " + str(self.depth))
-        print("")
 
     def get_possible_moves(self):
         possibilities = []
@@ -85,7 +84,6 @@ class Node:
             possibilities.append("VLAVO")
         if self.blank_pos[1] != self.size[1] - 1:
             possibilities.append("VPRAVO")
-            print(self.blank_pos[1], self.size[1] - 1)
         if self.blank_pos[0] != self.size[0] - 1:
             possibilities.append("DOLE")
         if self.last_operator in possibilities:
