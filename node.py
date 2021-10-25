@@ -5,7 +5,7 @@ class Node:
     map = []
     goalMap = []
     depth = 0
-    heuristic = None
+    heuristic = 1
     last_operator = None
     blank_pos = [0, 0]
     size = [0, 0]
@@ -25,9 +25,7 @@ class Node:
             self.map = args[0]
             self.goalMap = args[1]
             self.last_operator = args[2]
-            # new_blank_pos = args[3]
-            self.blank_pos[0] = args[3][0]
-            self.blank_pos[1] = args[3][1]
+            self.blank_pos = args[3]
             self.depth = args[4]
             self.size = args[5]
         self.calc_heuristic2()
@@ -148,6 +146,12 @@ class Node:
 
     def is_not_in(self, nodes):
         unique = False
+
+        # for node in nodes:
+        #     if node.heuristic != self.heuristic:
+        #         unique = True
+        #         break
+
         for node in nodes:
             unique = False
             for y in range(self.size[0]):

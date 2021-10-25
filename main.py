@@ -32,12 +32,11 @@ goal = get_random_state(3, 3)
 # goal = "((3 4 5)(M 1 2))"
 
 
+# input = "((M 1 2 3 4)(5 6 7 8 9))"
+# goal = "((4 3 2 6 1)(9 8 7 5 M))"
+
 input = "((M 1 2)(3 4 5)(6 7 8))"
 goal = "((8 M 6)(5 4 7)(2 3 1))"
-
-# input = "((M 2 3)(1 4 5)(8 7 6))"
-# input = "((1 2 3)(4 M 5)(8 7 6))"
-# goal = "((1 2 3)(8 M 4)(7 6 5))"
 
 root = Node(input, goal)
 print("======= START ======")
@@ -53,14 +52,14 @@ nodeCount = 0
 thisNode = root
 while thisNode.heuristic > 0:
     nodeCount += 1
-    # print("===== To Use =====")
-    # thisNode.print_state()
+
     opened.remove(thisNode)
     closed.append(thisNode)
 
     nodes = thisNode.gen_next_nodes()
 
     for node in nodes:
+        # if node.is_not_in(closed):
         opened.insert(0, node)
 
     # print("==== actual ====")
@@ -71,11 +70,8 @@ while thisNode.heuristic > 0:
     # thisNode.print_next_nodes()
     # closed.append(thisNode)
 
-    # find best price
-    bestNode = opened[0]
-    for actualNode in opened:
-        if actualNode.get_price() < bestNode.get_price():
-            bestNode = actualNode
+    # find node with lowest function
+    bestNode = min(opened, key=lambda x: x.get_price())
 
     thisNode = bestNode
 
