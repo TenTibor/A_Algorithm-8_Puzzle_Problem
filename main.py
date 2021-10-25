@@ -3,31 +3,38 @@ from node import Node
 input = "((4 1 3)(M 2 5)(8 7 6))"
 goal = "((1 2 3)(8 M 4)(7 6 5))"
 
-closed = []
-open = []  # blue
-
 root = Node(input, goal)
 print("======= Goal =======")
 root.print_goal()
+
+closed = []
+open = [root]  # blue
 
 thisNode = root
 while thisNode.heuristic > 0:
     print("===== To Use =====")
     thisNode.print_state()
-    print("===== Children =====")
+    print("==== actual ====")
+    print("Opened list:", len(open))
+    print("Closed list:", len(closed))
     nodes = thisNode.gen_next_nodes()
     for node in nodes:
-        node.print_state()
+        # node.print_state()
+        # TODO check if NODE is not same
+        open.append(node)
+    # print(open)
     # thisNode.print_next_nodes()
     # closed.append(thisNode)
 
     # find best price
-    bestNode = nodes[0]
-    for actualNode in nodes:
+    bestNode = open[0]
+    for actualNode in open:
         if actualNode.get_price() < bestNode.get_price():
             bestNode = actualNode
 
     thisNode = bestNode
+    open.remove(thisNode)
+    closed.append(thisNode)
 
 # solution found
 moves = ""
@@ -39,3 +46,5 @@ while thisNode is not None:
     thisNode = thisNode.parent_node
 print(moves[3:])
 print("Steps:", steps)
+print("Opened list:", len(open))
+print("Closed list:", len(closed))
