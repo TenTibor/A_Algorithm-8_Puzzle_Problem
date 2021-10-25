@@ -28,7 +28,6 @@ class Node:
             # new_blank_pos = args[3]
             self.blank_pos[0] = args[3][0]
             self.blank_pos[1] = args[3][1]
-            print("Position for created node", self.blank_pos)
             self.depth = args[4]
             self.size = args[5]
         self.calc_heuristic2()
@@ -79,7 +78,6 @@ class Node:
         print("")
 
     def get_possible_moves(self):
-        print("-Getting posibilities for blank position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
         possibilities = []
         if self.blank_pos[0] != 0:
             possibilities.append("HORE")
@@ -100,7 +98,6 @@ class Node:
             if self.last_operator == "VPRAVO":
                 possibilities.remove("VLAVO")
 
-        print("Earned posibilites", possibilities)
         return possibilities
 
     def calc_heuristic2(self):
@@ -127,11 +124,9 @@ class Node:
                         # print("goalY", goalY)
                         # print("currY", curY)
                         hThisX = (goalX - curX) if goalX > curX else curX - goalX
-
                         hThisY = (goalY - curY) if goalY > curY else curY - goalY
 
                         allNumsValue[index] = hThisX + hThisY
-                        # print(num, ":", allNumsValue[index], "(", hThisX, "+", hThisY, ")")
                         break
                     goalY += 1
 
@@ -144,19 +139,14 @@ class Node:
 
     def gen_next_nodes(self):
         possibilities = self.get_possible_moves() if self.heuristic > 0 else []
-        # clear nodes
-        print("Getting nodes for ", possibilities, "in position", self.blank_pos)
         newBlankPos = self.blank_pos
-        # get next node for every possible move
         createdNodes = []
         for possibility in possibilities:
-            print("-Doing", possibility)
 
             # gen map after move
             newMap = [row[:] for row in self.map]
             # calc new blank pos and switch values
             if possibility == "VPRAVO":
-                print("-getting blank from", self.blank_pos)
                 newBlankPos = [self.blank_pos[0], self.blank_pos[1] + 1]
                 newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             elif possibility == "VLAVO":
@@ -166,13 +156,10 @@ class Node:
                 newBlankPos = [self.blank_pos[0] - 1, self.blank_pos[1]]
                 newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             elif possibility == "DOLE":
-                print("-getting blank from", self.blank_pos)
                 newBlankPos = [self.blank_pos[0] + 1, self.blank_pos[1]]
-                print("-earned blank, ", newBlankPos[0], newBlankPos[1])
                 newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
 
             newMap[newBlankPos[0]][newBlankPos[1]] = "M"
-            print("-New blank, ", newBlankPos[0], newBlankPos[1])
             newNode = Node(newMap, self.goalMap, possibility, newBlankPos, self.depth + 1, self.size)
             newNode.blank_pos = newBlankPos  # fix changing blank pos
             newNode.parent_node = self
@@ -181,7 +168,6 @@ class Node:
 
         # for createdNode in createdNodes:
         #     self.nodes.append(createdNode)
-        print("[" + str(len(createdNodes)) + " nodes was generated]")
         return createdNodes
 
     def print_next_nodes(self):
