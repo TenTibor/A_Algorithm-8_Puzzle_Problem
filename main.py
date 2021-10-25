@@ -31,8 +31,11 @@ while thisNode.heuristic > 0:
 
 # solution found
 moves = ""
+steps = 0
 while thisNode is not None:
     if thisNode.last_operator is not None:
         moves = " > " + thisNode.last_operator + moves
+        steps += 1
     thisNode = thisNode.parent_node
 print(moves[3:])
+print("Steps:", steps)

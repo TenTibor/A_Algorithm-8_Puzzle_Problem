@@ -4,7 +4,7 @@ class Node:
     nodes = []
     map = []
     goalMap = []
-    depth = 1
+    depth = 0
     heuristic = None
     last_operator = None
     blank_pos = [0, 0]
