@@ -9,8 +9,22 @@ open = []  # blue
 root = Node(input, goal)
 print("======= Goal =======")
 root.print_goal()
-print("====== Actual ======")
-root.print_state()
-print("===== Children =====")
-root.gen_next_nodes()
-root.print_next_nodes()
+
+thisNode = root
+while thisNode.heuristic > 0:
+    print("===== To Use =====")
+    thisNode.print_state()
+    print("===== Children =====")
+    nodes = thisNode.gen_next_nodes()
+    for node in nodes:
+        node.print_state()
+    # thisNode.print_next_nodes()
+    # closed.append(thisNode)
+
+    # find best price
+    bestNode = nodes[0]
+    for actualNode in nodes:
+        if actualNode.get_price() < bestNode.get_price():
+            bestNode = actualNode
+
+    thisNode = bestNode

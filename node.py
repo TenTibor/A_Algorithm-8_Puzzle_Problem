@@ -7,11 +7,12 @@ class Node:
     depth = 0
     heuristic = None
     last_operator = None
-    blank_pos = None
+    blank_pos = [0, 0]
     size = [0, 0]
+    parent_node = None
 
     def __repr__(self):
-        return str(self.state)
+        return str(self.map)
 
     def __init__(self, *args):
         # init for ROOT
@@ -19,13 +20,18 @@ class Node:
             self.state = args[0]
             self.goalMap = self.render_map(args[1])
             self.map = self.render_map(args[0])
+            print("ROOTING")
         else:
             # init for CHILD
             self.map = args[0]
             self.goalMap = args[1]
             self.last_operator = args[2]
-            self.blank_pos = args[3]
+            # new_blank_pos = args[3]
+            self.blank_pos[0] = args[3][0]
+            self.blank_pos[1] = args[3][1]
+            print("Position for created node", self.blank_pos)
             self.depth = args[4]
+            self.size = args[5]
         self.calc_heuristic2()
 
     def render_map(self, state):
@@ -68,22 +74,34 @@ class Node:
                 print(y + " ", end="")
             print("")
 
+        print("Blank position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
         print("Heuristic: " + str(self.heuristic))
         print("Depth: " + str(self.depth))
+        print("")
 
     def get_possible_moves(self):
+        print("-Getting posibilities for blank position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
         possibilities = []
-        if self.blank_pos[1] != 0:
-            possibilities.append("HORE")
         if self.blank_pos[0] != 0:
+            possibilities.append("HORE")
+        if self.blank_pos[1] != 0:
             possibilities.append("VLAVO")
-        if self.blank_pos[1] != self.size[1]:
+        if self.blank_pos[1] != self.size[1] - 1:
             possibilities.append("VPRAVO")
-        if self.blank_pos[0] != self.size[0]:
+            print(self.blank_pos[1], self.size[1] - 1)
+        if self.blank_pos[0] != self.size[0] - 1:
             possibilities.append("DOLE")
         if self.last_operator in possibilities:
-            possibilities.remove(self.last_operator)
+            if self.last_operator == "HORE":
+                possibilities.remove("DOLE")
+            if self.last_operator == "DOLE":
+                possibilities.remove("HORE")
+            if self.last_operator == "VLAVO":
+                possibilities.remove("VPRAVO")
+            if self.last_operator == "VPRAVO":
+                possibilities.remove("VLAVO")
 
+        print("Earned posibilites", possibilities)
         return possibilities
 
     def calc_heuristic2(self):
@@ -126,16 +144,20 @@ class Node:
         self.heuristic = sum(allNumsValue)
 
     def gen_next_nodes(self):
-        possibilities = self.get_possible_moves()
-        print(possibilities)
+        possibilities = self.get_possible_moves() if self.heuristic > 0 else []
+        # clear nodes
+        print("Getting nodes for ", possibilities, "in position", self.blank_pos)
+        newBlankPos = self.blank_pos
         # get next node for every possible move
+        createdNodes = []
         for possibility in possibilities:
+            print("-Doing", possibility)
 
             # gen map after move
             newMap = [row[:] for row in self.map]
-            newBlankPos = None
             # calc new blank pos and switch values
             if possibility == "VPRAVO":
+                print("-getting blank from", self.blank_pos)
                 newBlankPos = [self.blank_pos[0], self.blank_pos[1] + 1]
                 newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             elif possibility == "VLAVO":
@@ -145,13 +167,27 @@ class Node:
                 newBlankPos = [self.blank_pos[0] - 1, self.blank_pos[1]]
                 newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
             elif possibility == "DOLE":
+                print("-getting blank from", self.blank_pos)
                 newBlankPos = [self.blank_pos[0] + 1, self.blank_pos[1]]
+                print("-earned blank, ", newBlankPos[0], newBlankPos[1])
                 newMap[self.blank_pos[0]][self.blank_pos[1]] = self.map[newBlankPos[0]][newBlankPos[1]]
 
             newMap[newBlankPos[0]][newBlankPos[1]] = "M"
+            print("-New blank, ", newBlankPos[0], newBlankPos[1])
+            newNode = Node(newMap, self.goalMap, possibility, newBlankPos, self.depth + 1, self.size)
+            newNode.blank_pos = newBlankPos # fix changing blank pos
 
-            self.nodes.append(Node(newMap, self.goalMap, possibility, newBlankPos, self.depth + 1))
+            createdNodes.append(newNode)
+
+        # for createdNode in createdNodes:
+        #     self.nodes.append(createdNode)
+        print("[" + str(len(createdNodes)) + " nodes was generated]")
+        return createdNodes
 
     def print_next_nodes(self):
+        # self.nodes[0].print_state()
         for node in self.nodes:
             node.print_state()
+
+    def get_price(self):
+        return self.depth + self.heuristic
