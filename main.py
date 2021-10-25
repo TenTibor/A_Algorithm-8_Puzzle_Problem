@@ -14,14 +14,19 @@ thisNode = root
 while thisNode.heuristic > 0:
     print("===== To Use =====")
     thisNode.print_state()
-    print("==== actual ====")
-    print("Opened list:", len(open))
-    print("Closed list:", len(closed))
+    open.remove(thisNode)
+    closed.append(thisNode)
+
     nodes = thisNode.gen_next_nodes()
     for node in nodes:
-        # node.print_state()
-        # TODO check if NODE is not same
-        open.append(node)
+        # add unique nodes
+        if node.is_not_in(closed):
+            open.append(node)
+
+    print("==== actual ====")
+    print("Opened list:", len(open))
+    print(open)
+    print("Closed list:", len(closed))
     # print(open)
     # thisNode.print_next_nodes()
     # closed.append(thisNode)
@@ -33,8 +38,6 @@ while thisNode.heuristic > 0:
             bestNode = actualNode
 
     thisNode = bestNode
-    open.remove(thisNode)
-    closed.append(thisNode)
 
 # solution found
 moves = ""

@@ -175,3 +175,20 @@ class Node:
 
     def get_price(self):
         return self.depth + self.heuristic
+
+    def is_not_in(self, nodes):
+        unique = False
+        for node in nodes:
+            unique = False
+            for y in range(self.size[0]):
+                for x in range(self.size[1]):
+                    # print(self.map[y][x], node.map[y][x])
+                    if self.map[y][x] != node.map[y][x]:
+                        unique = True
+                        break
+                if unique:
+                    break
+            if unique is False:
+                break
+
+        return unique
