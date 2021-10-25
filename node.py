@@ -4,7 +4,7 @@ class Node:
     nodes = []
     map = []
     goalMap = []
-    depth = 0
+    depth = 1
     heuristic = None
     last_operator = None
     blank_pos = [0, 0]
@@ -175,7 +175,8 @@ class Node:
             newMap[newBlankPos[0]][newBlankPos[1]] = "M"
             print("-New blank, ", newBlankPos[0], newBlankPos[1])
             newNode = Node(newMap, self.goalMap, possibility, newBlankPos, self.depth + 1, self.size)
-            newNode.blank_pos = newBlankPos # fix changing blank pos
+            newNode.blank_pos = newBlankPos  # fix changing blank pos
+            newNode.parent_node = self
 
             createdNodes.append(newNode)
 

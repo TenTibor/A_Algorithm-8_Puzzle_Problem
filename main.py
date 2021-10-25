@@ -1,6 +1,6 @@
 from node import Node
 
-input = "((M 2 3)(1 4 5)(8 7 6))"
+input = "((M 1 3)(4 2 5)(8 7 6))"
 goal = "((1 2 3)(8 M 4)(7 6 5))"
 
 closed = []
@@ -28,3 +28,11 @@ while thisNode.heuristic > 0:
             bestNode = actualNode
 
     thisNode = bestNode
+
+# solution found
+moves = ""
+while thisNode is not None:
+    if thisNode.last_operator is not None:
+        moves = " > " + thisNode.last_operator + moves
+    thisNode = thisNode.parent_node
+print(moves[3:])
