@@ -27,15 +27,23 @@ def get_random_state(m, n):
 
 start_time = datetime.now()
 
-size_of_generated_puzzle = [3, 3]
+size_of_generated_puzzle = [2, 2]
 
 input = get_random_state(size_of_generated_puzzle[0], size_of_generated_puzzle[1])
 goal = get_random_state(size_of_generated_puzzle[0], size_of_generated_puzzle[1])
 
+# EXAMPLE 1
 # input = "((M 1 2)(3 4 5))"
 # goal = "((3 4 5)(M 1 2))"
+
+# EXAMPLE 2
 # input = "((M 1 2)(3 4 5)(6 7 8))"
 # goal = "((8 M 6)(5 4 7)(2 3 1))"
+
+# EXAMPLE 3
+# input = "((1 M 2)(3 7 4)(8 6 5))"
+# goal = "((8 2 3)(M 7 5)(1 6 4))"
+
 
 root = Node(input, goal)
 print("== START ==")
@@ -73,7 +81,7 @@ while thisNode.heuristic > 0:
                 f"| Average: {(datetime.now() - start_time) / nodeCount}/node",
           end="")
 
-print("== FINISH ==")
+print("\n== FINISH ==")
 thisNode.print_state()
 
 # solution found

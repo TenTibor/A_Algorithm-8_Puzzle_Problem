@@ -100,9 +100,6 @@ class Node:
     def calc_heuristic2(self):
         sum = 0
 
-        # if self.depth == 27:
-        #     print("lol")
-
         for yIndex, yMap in enumerate(self.map):
             for xMap in yMap:
                 xIndex = yMap.index(xMap)
@@ -118,9 +115,6 @@ class Node:
 
     def calc_heuristic1(self):
         sum = 0
-
-        # if self.depth == 27:
-        #     print("lol")
 
         for yIndex, yMap in enumerate(self.map):
             for xIndex, xMap in enumerate(yMap):
