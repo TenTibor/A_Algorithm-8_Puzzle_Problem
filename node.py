@@ -4,8 +4,7 @@ heur_type = 3
 class Node:
     state = None
     goal = None
-    nodes = []
-    map = []
+    map = []  # state in array list
     goalMap = []
     depth = 0
     heuristic = 0
@@ -32,6 +31,7 @@ class Node:
             self.depth = args[4]
             self.size = args[5]
 
+        # choose heuristic function by global variable
         if heur_type == 3:
             self.calc_heuristic1()
             self.calc_heuristic2()
@@ -40,6 +40,7 @@ class Node:
         elif heur_type == 1:
             self.calc_heuristic1()
 
+    # render map from state
     def render_map(self, state):
         newMap = []
         temp = state.replace("((", "").replace("))", "").split(" ")
@@ -80,10 +81,12 @@ class Node:
                 print(y + " ", end="")
             print("")
 
+        # UNCOMMENT TO SEE MORE INFORMATION
         # print("Blank position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
         # print("Heuristic: " + str(self.heuristic))
         # print("Depth: " + str(self.depth))
 
+    # get possible moves by position of space
     def get_possible_moves(self):
         possibilities = []
         if self.blank_pos[0] != 0 and self.last_operator != "DOLE":
@@ -97,9 +100,9 @@ class Node:
 
         return possibilities
 
+    # calc h by distance of final place
     def calc_heuristic2(self):
         sum = 0
-
         for yIndex, yMap in enumerate(self.map):
             for xMap in yMap:
                 xIndex = yMap.index(xMap)
@@ -113,6 +116,7 @@ class Node:
                             break
         self.heuristic += sum
 
+    # calc h by count of elements in wrong place
     def calc_heuristic1(self):
         sum = 0
 
@@ -125,6 +129,7 @@ class Node:
 
         self.heuristic += sum
 
+    # return new nodes
     def gen_next_nodes(self):
         possibilities = self.get_possible_moves() if self.heuristic > 0 else []
         newBlankPos = [999, 999]
@@ -155,20 +160,13 @@ class Node:
 
         return createdNodes
 
-    def print_next_nodes(self):
-        for node in self.nodes:
-            node.print_state()
-
+    # get price by sum of h nad d
     def get_price(self):
         return self.depth + self.heuristic
 
+    # not used function because its just slower
     def is_not_in(self, nodes):
         unique = False
-
-        # for node in nodes:
-        #     if node.heuristic != self.heuristic:
-        #         unique = True
-        #         break
 
         for node in nodes:
             unique = False
