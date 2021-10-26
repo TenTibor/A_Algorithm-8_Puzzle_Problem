@@ -70,9 +70,9 @@ class Node:
                 print(y + " ", end="")
             print("")
 
-        print("Blank position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
-        print("Heuristic: " + str(self.heuristic))
-        print("Depth: " + str(self.depth))
+        # print("Blank position: " + str(self.blank_pos[0]) + ":" + str(self.blank_pos[1]))
+        # print("Heuristic: " + str(self.heuristic))
+        # print("Depth: " + str(self.depth))
 
     def get_possible_moves(self):
         possibilities = []

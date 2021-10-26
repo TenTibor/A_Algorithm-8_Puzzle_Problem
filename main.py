@@ -26,17 +26,17 @@ def get_random_state(m, n):
 
 
 start_time = datetime.now()
-input = get_random_state(3, 3)
-goal = get_random_state(3, 3)
+
+size_of_generated_puzzle = [3, 3]
+
+input = get_random_state(size_of_generated_puzzle[0], size_of_generated_puzzle[1])
+goal = get_random_state(size_of_generated_puzzle[0], size_of_generated_puzzle[1])
 # input = "((M 1 2)(3 4 5))"
 # goal = "((3 4 5)(M 1 2))"
 
 
-# input = "((M 1 2 3 4)(5 6 7 8 9))"
-# goal = "((4 3 2 6 1)(9 8 7 5 M))"
-
-input = "((M 1 2)(3 4 5)(6 7 8))"
-goal = "((8 M 6)(5 4 7)(2 3 1))"
+# input = "((M 1 2)(3 4 5)(6 7 8))"
+# goal = "((8 M 6)(5 4 7)(2 3 1))"
 
 root = Node(input, goal)
 print("======= START ======")
@@ -44,9 +44,10 @@ root.print_state()
 #
 print("======= Goal =======")
 root.print_goal()
+print("====================")
 
 closed = []
-opened = [root]  # blue
+opened = [root]
 
 nodeCount = 0
 thisNode = root
@@ -59,16 +60,7 @@ while thisNode.heuristic > 0:
     nodes = thisNode.gen_next_nodes()
 
     for node in nodes:
-        # if node.is_not_in(closed):
         opened.insert(0, node)
-
-    # print("==== actual ====")
-    # print("Opened list:", len(open))
-    # print(open)
-    # print("Closed list:", len(closed))
-    # print(open)
-    # thisNode.print_next_nodes()
-    # closed.append(thisNode)
 
     # find node with lowest function
     bestNode = min(opened, key=lambda x: x.get_price())
@@ -97,8 +89,6 @@ while thisNode is not None:
 print("======= RESULT =======")
 print(moves[3:])
 print("Steps:", steps)
-print("Opened list:", len(opened))
-print("Closed list:", len(closed))
 print("Nodes:", nodeCount)
 print('Duration: {}'.format(datetime.now() - start_time))
 print(f"Avery time per Node:", (datetime.now() - start_time) / nodeCount)
