@@ -5,11 +5,12 @@ class Node:
     map = []
     goalMap = []
     depth = 0
-    heuristic = 1
+    heuristic = 0
     last_operator = None
     blank_pos = [0, 0]
     size = [0, 0]
     parent_node = None
+    heur_type = 3
 
     def __repr__(self):
         return str(self.map)
@@ -28,7 +29,14 @@ class Node:
             self.blank_pos = args[3]
             self.depth = args[4]
             self.size = args[5]
-        self.calc_heuristic2()
+
+        if self.heur_type == 3:
+            self.calc_heuristic1()
+            self.calc_heuristic2()
+        elif self.heur_type == 2:
+            self.calc_heuristic2()
+        elif self.heur_type == 1:
+            self.calc_heuristic1()
 
     def render_map(self, state):
         newMap = []
@@ -104,8 +112,22 @@ class Node:
                             hThisY = (yGoalIndex - yIndex) if yGoalIndex > yIndex else yIndex - yGoalIndex
                             sum += hThisX + hThisY
                             break
+        self.heuristic += sum
 
-        self.heuristic = sum
+    def calc_heuristic1(self):
+        sum = 0
+
+        # if self.depth == 27:
+        #     print("lol")
+
+        for yIndex, yMap in enumerate(self.map):
+            for xIndex, xMap in enumerate(yMap):
+                if xMap != "M":
+                    if self.goalMap[yIndex][xIndex] != xMap:
+                        sum = + 1
+                        break
+
+        self.heuristic += sum
 
     def gen_next_nodes(self):
         possibilities = self.get_possible_moves() if self.heuristic > 0 else []
