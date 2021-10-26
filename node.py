@@ -1,3 +1,6 @@
+heur_type = 3
+
+
 class Node:
     state = None
     goal = None
@@ -10,7 +13,6 @@ class Node:
     blank_pos = [0, 0]
     size = [0, 0]
     parent_node = None
-    heur_type = 3
 
     def __repr__(self):
         return str(self.map)
@@ -30,12 +32,12 @@ class Node:
             self.depth = args[4]
             self.size = args[5]
 
-        if self.heur_type == 3:
+        if heur_type == 3:
             self.calc_heuristic1()
             self.calc_heuristic2()
-        elif self.heur_type == 2:
+        elif heur_type == 2:
             self.calc_heuristic2()
-        elif self.heur_type == 1:
+        elif heur_type == 1:
             self.calc_heuristic1()
 
     def render_map(self, state):

@@ -31,20 +31,19 @@ size_of_generated_puzzle = [3, 3]
 
 input = get_random_state(size_of_generated_puzzle[0], size_of_generated_puzzle[1])
 goal = get_random_state(size_of_generated_puzzle[0], size_of_generated_puzzle[1])
+
 # input = "((M 1 2)(3 4 5))"
 # goal = "((3 4 5)(M 1 2))"
-
-
 # input = "((M 1 2)(3 4 5)(6 7 8))"
 # goal = "((8 M 6)(5 4 7)(2 3 1))"
 
 root = Node(input, goal)
-print("======= START ======")
+print("== START ==")
 root.print_state()
-#
-print("======= Goal =======")
+
+print("=== Goal ===")
 root.print_goal()
-print("====================")
+print("============")
 
 closed = []
 opened = [root]
@@ -74,7 +73,7 @@ while thisNode.heuristic > 0:
                 f"| Average: {(datetime.now() - start_time) / nodeCount}/node",
           end="")
 
-print("\n======= FINISH =======")
+print("== FINISH ==")
 thisNode.print_state()
 
 # solution found
